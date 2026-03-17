@@ -1,16 +1,4 @@
-/* ============================================
-   WIZARD'S PORTAL — Script (Mobile-Optimised)
-   ============================================ */
-
-// ──────────────────────────────────────────────
-// Static team credentials
-// ──────────────────────────────────────────────
-const TEAMS = [
-    { team_id: "ABCD", house_name: "Gryffindor", room_number: "SF 213" },
-    { team_id: "EFGH", house_name: "Slytherin",  room_number: "SF 214" },
-    { team_id: "IJKL", house_name: "Ravenclaw",  room_number: "SF 215" },
-    { team_id: "MNOP", house_name: "Hufflepuff", room_number: "SF 216" },
-];
+import { TEAMS } from "./team.js";
 
 // House → CSS class mapping
 const HOUSE_CLASSES = {
@@ -26,9 +14,6 @@ const HOUSE_CLASSES = {
 const IS_MOBILE = window.innerWidth < 560;
 const MAX_PARTICLES = IS_MOBILE ? 35 : 70;
 
-// ──────────────────────────────────────────────
-// Particle System (canvas-based, performance-aware)
-// ──────────────────────────────────────────────
 class MagicalParticles {
     constructor(canvas) {
         this.canvas = canvas;
@@ -141,9 +126,6 @@ class MagicalParticles {
     }
 }
 
-// ──────────────────────────────────────────────
-// Magic chime (Web Audio — very lightweight)
-// ──────────────────────────────────────────────
 function playMagicChime() {
     try {
         const ac = new (window.AudioContext || window.webkitAudioContext)();
@@ -171,9 +153,7 @@ function playMagicChime() {
     } catch (_) { /* silent fallback */ }
 }
 
-// ──────────────────────────────────────────────
-// Init
-// ──────────────────────────────────────────────
+
 document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("particleCanvas");
     if (canvas) new MagicalParticles(canvas);
@@ -251,9 +231,7 @@ function initLogin() {
     });
 }
 
-// ──────────────────────────────────────────────
-// DASHBOARD
-// ──────────────────────────────────────────────
+
 function initDashboard() {
     const card       = document.getElementById("dashboardCard");
     const transition = document.getElementById("pageTransition");
