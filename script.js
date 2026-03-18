@@ -205,7 +205,7 @@ function initLogin() {
             (t) =>
                 t.team_id.toLowerCase()     === tid.toLowerCase() &&
                 t.house_name.toLowerCase()  === house.toLowerCase() &&
-                t.room_number.toLowerCase() === room.toLowerCase()
+                t.location.toLowerCase() === room.toLowerCase()
         );
 
         if (match) {
@@ -214,7 +214,7 @@ function initLogin() {
 
             sessionStorage.setItem("wizard_team_id",     match.team_id);
             sessionStorage.setItem("wizard_house_name",  match.house_name);
-            sessionStorage.setItem("wizard_room_number", match.room_number);
+            sessionStorage.setItem("wizard_location", match.location);
 
             transition.classList.add("active");
             if (typeof gsap !== "undefined") {
@@ -240,7 +240,7 @@ function initDashboard() {
 
     const teamId     = sessionStorage.getItem("wizard_team_id");
     const houseName  = sessionStorage.getItem("wizard_house_name");
-    const roomNumber = sessionStorage.getItem("wizard_room_number");
+    const roomNumber = sessionStorage.getItem("wizard_location");
 
     if (!teamId || !houseName || !roomNumber) {
         window.location.href = "index.html";
