@@ -1,4 +1,10 @@
-import { TEAMS } from "./team.js";
+// Team data (inlined to support file:// protocol without a local server)
+const TEAMS = [
+    { team_id: "ABCD", house_name: "Gryffindor", location: "SF 213" },
+    { team_id: "EFGH", house_name: "Slytherin",  location: "SF 214" },
+    { team_id: "IJKL", house_name: "Ravenclaw",  location: "SF 215" },
+    { team_id: "MNOP", house_name: "Hufflepuff", location: "SF 216" },
+];
 
 // House → CSS class mapping
 const HOUSE_CLASSES = {
@@ -199,13 +205,25 @@ function initLogin() {
         e.preventDefault();
         const tid   = document.getElementById("teamId").value.trim();
         const house = document.getElementById("houseName").value.trim();
-        const room  = document.getElementById("roomNumber").value.trim();
+        const loc   = document.getElementById("roomLocation").value.trim();
+
+        const normalize = (str) => str ? String(str).toLowerCase().replace(/[\s-]/g, "") : "";
+
+        console.log("Login attempt:", { tid, house, loc });
+        console.log("Normalized incoming location:", normalize(loc));
+        console.log("Current TEAMS data:", TEAMS);
 
         const match = TEAMS.find(
-            (t) =>
-                t.team_id.toLowerCase()     === tid.toLowerCase() &&
-                t.house_name.toLowerCase()  === house.toLowerCase() &&
-                t.location.toLowerCase() === room.toLowerCase()
+            (t) => {
+                const isMatch = t.team_id.toLowerCase() === tid.toLowerCase() &&
+                                t.house_name.toLowerCase() === house.toLowerCase() &&
+                                normalize(t.location || t.room_number) === normalize(loc);
+                
+                if (isMatch) {
+                    console.log("Matched Team:", t);
+                }
+                return isMatch;
+            }
         );
 
         if (match) {
@@ -214,7 +232,7 @@ function initLogin() {
 
             sessionStorage.setItem("wizard_team_id",     match.team_id);
             sessionStorage.setItem("wizard_house_name",  match.house_name);
-            sessionStorage.setItem("wizard_location", match.location);
+            sessionStorage.setItem("wizard_location", match.location || match.room_number);
 
             transition.classList.add("active");
             if (typeof gsap !== "undefined") {
@@ -240,9 +258,9 @@ function initDashboard() {
 
     const teamId     = sessionStorage.getItem("wizard_team_id");
     const houseName  = sessionStorage.getItem("wizard_house_name");
-    const roomNumber = sessionStorage.getItem("wizard_location");
+    const locValue   = sessionStorage.getItem("wizard_location");
 
-    if (!teamId || !houseName || !roomNumber) {
+    if (!teamId || !houseName || !locValue) {
         window.location.href = "index.html";
         return;
     }
@@ -250,7 +268,7 @@ function initDashboard() {
     // Populate data
     document.getElementById("displayTeamId").textContent     = teamId;
     document.getElementById("displayHouseName").textContent   = houseName;
-    document.getElementById("displayRoomNumber").textContent  = roomNumber;
+    document.getElementById("displayLocation").textContent  = locValue;
 
     // House badge
     const houseKey = houseName.toLowerCase();
